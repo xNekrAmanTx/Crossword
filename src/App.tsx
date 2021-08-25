@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import {data} from "./constants/hardedData";
 
 function App() {
+  const [matrix, setMatrix] = useState([[]]);
+
+  useEffect(() => {
+    setMatrix(data.character_grid);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="App-header"></header>
+      <main className="main">
+        <table>
+          {matrix.map((row, i) => {
+            <tr>
+              {row.map((el,j) => {
+                <td>
+                  {el}
+                </td>
+              })}
+            </tr>
+          })}
+        </table>
+      </main>
+      <footer className="App-footer"></footer>
     </div>
   );
 }
