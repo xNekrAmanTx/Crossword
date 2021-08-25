@@ -1,6 +1,22 @@
-import { Interface } from "readline";
+// interface InitialData {
+//   source_language: string,
+//   word: string,
+//   character_grid: string[][],
+//   word_locations: any,
+//   target_language: string,
+// }
 
-const initialData = [
+export type CharGridType = (string | undefined)[][]
+
+export type DataType = Array<{
+  source_language: string,
+  word: string,
+  character_grid: CharGridType,
+  word_locations: any,
+  target_language: string,
+}>
+
+const initialData/* : InitialData[] */ = [
   {
     source_language: "en",
     word: "man",
@@ -157,14 +173,9 @@ const initialData = [
   },
 ];
 
-type DataType = Array<{
-  source_language: string,
-  word: string,
-  character_grid: Array<Array<string>>,
-  word_locations: any,
-  target_language: string,
-}>
-
-export const data : DataType = initialData.map(({ character_grid, ...rest }) =>
-  ({character_grid.map((row) => row.map((str) => decodeURI(str))), ...rest})
+export const data : DataType = initialData.map(({ character_grid, ...rest }) => (
+   {character_grid: character_grid.map(row => (
+      row.map(str => decodeURI(str))
+    )), ...rest}
+  )
 );

@@ -1,0 +1,29 @@
+.App-main {
+  display: flex;
+  justify-content: center;
+}
+
+.crossword-matrix {
+  cursor: pointer;
+  user-select: none;
+}
+
+.row {
+}
+
+.row__item {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid black;
+  text-align: center;
+  padding-top: 0.2rem;
+}
+
+.row__item_active {
+  background-color: brown;
+  font-weight: 600;
+  color: white;
+  transition: all .25s ease 0s; ;
+}
