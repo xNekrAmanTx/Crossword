@@ -2,13 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { CharGridType, data } from "./constants/hardedData";
 
-function App() {
+
+const Crossword = ({step, setStep}) => {
   const [matrix, setMatrix] = useState([[]]);
   const [isActive, setIsActive] = useState(false);
   const [rightTranslations, setRightTranslations] = useState([]);
   const [userWord, setUserWord] = useState('');
-
-
+  const [sourceLanguage, setSourceLanguage] = useState('');
+  const [targetLanguage, setTargetLanguage] = useState('');
+  const [taskWord, setTaskWord] = useState('');
+  
   const turnOn = useCallback(() => {
     setIsActive(true)
   }, []);
@@ -27,11 +30,15 @@ function App() {
   }
 
   const handleMouseUp = () => {
-    console.log(userWord);
-    isActive && rightTranslations.some(str => userWord === str) && alert(`*** ${userWord} *** - Good Job!`)
-    turnOff();
+    if (isActive) {
+      if (rightTranslations.some(str => userWord === str)) {
+        alert(`YOU GOD DAMN RIGHT! *** ${userWord} *** - Good Job!`);
+        setStep(step => step !== data.length - 1 ? step + 1 : -1);
+      }
+      turnOff();
+    }
   }
-  
+
   const handleMouseOver = e => {
     const cell = e.target;
     const prevCell = e.relatedTarget;
@@ -47,19 +54,13 @@ function App() {
     }
   }
 
-  // useEffect(()=>{
-  //   const observer = new MutationObserver(function (mutations) {
-  //     mutations.forEach(function (mutationRecord) {
-  //       console.log(mutationRecord.target);
-  //     });
-  //   });
-  //   observer.observe(document.getElementById('matrix0'), { attributes: true, subtree: true});
-  // },[])
-
   useEffect(() => {
-    setMatrix(data[3].character_grid);
-    setRightTranslations(Object.values(data[3].word_locations))
-  }, []);
+    setMatrix(data[step].character_grid);
+    setRightTranslations(Object.values(data[step].word_locations));
+    setSourceLanguage(data[step].source_language);
+    setTargetLanguage(data[step].target_language);
+    setTaskWord(data[step].word);
+  }, [step]);
 
   useEffect(() => {
     if (!isActive) {
@@ -70,10 +71,11 @@ function App() {
     }
   }, [isActive])
 
-  return (
-    <div className="App">
-      <header className="App-header"></header>
-      <main className="App-main">
+  return(
+  <>
+        <h1 className="crossword-number">
+          {`Level ${step + 1}`}
+        </h1>
         <div
           className="crossword-matrix"
           onMouseDown={handleMouseDown}
@@ -97,6 +99,40 @@ function App() {
             </div>
           ))}
         </div>
+        <h2 className="crossword-task">
+          {`Translate word "${taskWord}" from ${sourceLanguage} to ${targetLanguage}   ... <<${rightTranslations.join(`, `)}>>`}
+        </h2>
+        </>
+  )
+}
+
+function App() {
+
+  const [step, setStep] = useState(0);
+
+
+  // useEffect(()=>{
+  //   const observer = new MutationObserver(function (mutations) {
+  //     mutations.forEach(function (mutationRecord) {
+  //       console.log(mutationRecord.target);
+  //     });
+  //   });
+  //   observer.observe(document.getElementById('matrix0'), { attributes: true, subtree: true});
+  // },[])
+
+
+  return (
+    <div className="App">
+      <header className="App-header"></header>
+      <main className="App-main">
+        {
+        ~step ?
+        <Crossword step={step} setStep={setStep}/>
+        :
+        <h1>
+          You won. Congrats!
+        </h1>
+        }
       </main>
       <footer className="App-footer"></footer>
     </div>
