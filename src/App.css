@@ -31,7 +31,7 @@
 }
 
 .row__item_active {
-  background-color: brown;
+  background-color: grey;
   font-weight: 600;
   color: white;
   transition: all .25s ease 0s;
